@@ -1,2 +1,5 @@
 .agents/
 .claude/
+.agent/
+.omc/
+skills-lock.json
