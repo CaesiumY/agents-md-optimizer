@@ -1,6 +1,6 @@
 ---
 name: agents-md-optimizer
-description: "Optimize agent context files (CLAUDE.md, AGENTS.md, .cursorrules, etc.) using Addy Osmani's agents-md methodology. Triggers: 'optimize CLAUDE.md', 'streamline CLAUDE.md', 'agents-md', 'discoverability filter', 'add gotchas', 'optimize AGENTS.md', 'optimize context file', 'CLAUDE.md 최적화', 'CLAUDE.md 줄이기', 'CLAUDE.md 다이어트', 'optimize .cursorrules'."
+description: "Optimize agent context files (AGENTS.md, CLAUDE.md, .cursorrules, .windsurfrules, .github/copilot-instructions.md, codex.md, etc.) using Addy Osmani's agents-md methodology. Triggers: 'optimize CLAUDE.md', 'streamline CLAUDE.md', 'agents-md', 'discoverability filter', 'add gotchas', 'optimize AGENTS.md', 'optimize context file', 'CLAUDE.md 최적화', 'CLAUDE.md 줄이기', 'CLAUDE.md 다이어트', 'optimize .cursorrules', 'optimize .windsurfrules', 'optimize copilot-instructions', 'optimize codex.md'."
 allowed-tools: [Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion]
 ---
 
@@ -32,10 +32,13 @@ If `--help` is present, display available flags and a brief description of the w
 **Target File Resolution** (when `--path` is not specified):
 
 Search for the first existing file in this priority order:
-1. `CLAUDE.md`
-2. `AGENTS.md`
+1. `AGENTS.md`
+2. `CLAUDE.md`
 3. `.cursorrules`
 4. `CURSOR.md`
+5. `.github/copilot-instructions.md`
+6. `.windsurfrules`
+7. `codex.md`
 
 If none found, ask the user to specify the target file path.
 
@@ -48,10 +51,10 @@ Read the target file. Collect line statistics.
 **Script Location**: Find the line-count script by searching for it:
 
 ```bash
-# Find the skill's line-count script
-SCRIPT_PATH=$(find ~/.claude/skills -path "*/agents-md-optimizer/scripts/line-count.mjs" 2>/dev/null | head -1)
+# Search in common skill installation paths
+SCRIPT_PATH=$(find ~/.claude/skills ~/.codex/skills ~/.cursor/skills ~/skills 2>/dev/null -path "*/agents-md-optimizer/scripts/line-count.mjs" | head -1)
 if [ -z "$SCRIPT_PATH" ]; then
-  # Fallback: search in common locations
+  # Fallback: search in current directory
   SCRIPT_PATH=$(find . -path "*/agents-md-optimizer/scripts/line-count.mjs" 2>/dev/null | head -1)
 fi
 ```

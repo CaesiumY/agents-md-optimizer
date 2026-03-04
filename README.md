@@ -4,7 +4,7 @@
 
 [한국어](README.ko.md)
 
-A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code/skills) that optimizes agent context files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, etc.) using [Addy Osmani's agents-md methodology](https://addyosmani.com/blog/agents-md/).
+An [agent skill](https://skills.sh) that optimizes agent context files (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules`, etc.) using [Addy Osmani's agents-md methodology](https://addyosmani.com/blog/agents-md/).
 
 ## What it does
 
@@ -31,7 +31,7 @@ npx skills add ~/path/to/agents-md-optimizer
 
 ## Usage
 
-After installation, trigger the skill in Claude Code with any of these phrases:
+After installation, trigger the skill in your AI coding agent with any of these phrases:
 
 - `optimize CLAUDE.md`
 - `streamline CLAUDE.md`
@@ -55,7 +55,7 @@ After installation, trigger the skill in Claude Code with any of these phrases:
 
 When `--path` is not specified, the skill automatically searches for the first available file:
 
-`CLAUDE.md` → `AGENTS.md` → `.cursorrules` → `CURSOR.md`
+`AGENTS.md` → `CLAUDE.md` → `.cursorrules` → `CURSOR.md` → `.github/copilot-instructions.md` → `.windsurfrules` → `codex.md`
 
 ### Examples
 
@@ -65,6 +65,12 @@ optimize CLAUDE.md --dry-run
 optimize CLAUDE.md --report-only
 optimize AGENTS.md --path ./AGENTS.md
 ```
+
+## Compatibility
+
+Works with any AI coding agent that supports skills:
+
+Claude Code · Cursor · GitHub Copilot · Windsurf · Cline · Gemini CLI · OpenAI Codex · and more
 
 ## How it works
 

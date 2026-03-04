@@ -4,7 +4,7 @@
 
 [English](README.md)
 
-에이전트 컨텍스트 파일(`CLAUDE.md`, `AGENTS.md`, `.cursorrules` 등)을 [Addy Osmani의 agents-md 방법론](https://addyosmani.com/blog/agents-md/)으로 최적화하는 [Claude Code 스킬](https://docs.anthropic.com/en/docs/claude-code/skills)입니다.
+에이전트 컨텍스트 파일(`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.windsurfrules` 등)을 [Addy Osmani의 agents-md 방법론](https://addyosmani.com/blog/agents-md/)으로 최적화하는 [에이전트 스킬](https://skills.sh)입니다.
 
 ## 기능
 
@@ -31,7 +31,7 @@ npx skills add ~/path/to/agents-md-optimizer
 
 ## 사용법
 
-설치 후 Claude Code에서 다음 문구로 트리거할 수 있습니다:
+설치 후 AI 코딩 에이전트에서 다음 문구로 트리거할 수 있습니다:
 
 - `CLAUDE.md 최적화`
 - `CLAUDE.md 줄이기`
@@ -58,7 +58,7 @@ npx skills add ~/path/to/agents-md-optimizer
 
 `--path`를 지정하지 않으면 다음 순서로 첫 번째 존재하는 파일을 자동 탐색합니다:
 
-`CLAUDE.md` → `AGENTS.md` → `.cursorrules` → `CURSOR.md`
+`AGENTS.md` → `CLAUDE.md` → `.cursorrules` → `CURSOR.md` → `.github/copilot-instructions.md` → `.windsurfrules` → `codex.md`
 
 ### 예시
 
@@ -68,6 +68,12 @@ CLAUDE.md 최적화 --dry-run
 CLAUDE.md 최적화 --report-only
 optimize AGENTS.md --path ./AGENTS.md
 ```
+
+## 호환 플랫폼
+
+스킬을 지원하는 모든 AI 코딩 에이전트에서 사용 가능합니다:
+
+Claude Code · Cursor · GitHub Copilot · Windsurf · Cline · Gemini CLI · OpenAI Codex · 그 외 다수
 
 ## 작동 원리
 
