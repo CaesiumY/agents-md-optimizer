@@ -1,12 +1,12 @@
 ---
 name: agents-md-optimizer
-description: "Optimize agent context files (CLAUDE.md, AGENTS.md, CURSOR.md, etc.) using Addy Osmani's agents-md methodology: apply the discoverability filter to remove redundant information, mine source code for gotchas and landmines, and compress verbose sections. Use when the user says 'optimize CLAUDE.md', 'streamline CLAUDE.md', 'agents-md', 'discoverability filter', 'add gotchas', 'optimize AGENTS.md', 'optimize context file'."
+description: "Optimize agent context files (CLAUDE.md, AGENTS.md, .cursorrules, etc.) using Addy Osmani's agents-md methodology. Triggers: 'optimize CLAUDE.md', 'streamline CLAUDE.md', 'agents-md', 'discoverability filter', 'add gotchas', 'optimize AGENTS.md', 'optimize context file', 'CLAUDE.md 최적화', 'CLAUDE.md 줄이기', 'CLAUDE.md 다이어트', 'optimize .cursorrules'."
 allowed-tools: [Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion]
 ---
 
 # Agents-MD Optimizer
 
-Optimize agent context files (CLAUDE.md, AGENTS.md, CURSOR.md, etc.) by applying the discoverability filter: remove information agents can discover from code, keep only non-discoverable operational knowledge (gotchas, landmines, non-standard conventions), and mine source code for undocumented gotchas.
+Optimize agent context files (CLAUDE.md, AGENTS.md, .cursorrules, etc.) by applying the discoverability filter: remove information agents can discover from code, keep only non-discoverable operational knowledge (gotchas, landmines, non-standard conventions), and mine source code for undocumented gotchas.
 
 Research shows redundant context (directory trees, data flow diagrams) degrades agent performance by 15-20%, while human-authored operational knowledge reduces runtime by ~28%.
 
@@ -18,22 +18,58 @@ Parse `$ARGUMENTS` for optional flags:
 |------|--------|
 | `--dry-run` | Analyze and show diff without modifying the file |
 | `--report-only` | Output statistics and classification table only |
-| `--path <path>` | Target file path (default: `./CLAUDE.md`) |
+| `--path <path>` | Target file path (see auto-detection below) |
 | `--help` | Display usage and exit |
 
-If `--help` is present, display available flags and a brief description of the 4-step workflow, then stop.
+If `--help` is present, display available flags and a brief description of the workflow, then stop.
 
 ## Workflow
 
+### Phase 0: Setup
+
+**Language Detection**: Detect the user's language from conversation history. Present all analysis results and messages in the user's language.
+
+**Target File Resolution** (when `--path` is not specified):
+
+Search for the first existing file in this priority order:
+1. `CLAUDE.md`
+2. `AGENTS.md`
+3. `.cursorrules`
+4. `CURSOR.md`
+
+If none found, ask the user to specify the target file path.
+
+**Small File Check**: If the target file has fewer than 20 lines, inform the user that the file is already minimal and optimization is unnecessary. Stop unless the user explicitly requests to proceed.
+
 ### Step 1: Baseline Analysis
 
-Read the target file. Collect line statistics:
+Read the target file. Collect line statistics.
+
+**Script Location**: Find the line-count script by searching for it:
 
 ```bash
-node ./scripts/line-count.mjs '<TARGET_PATH>'
+# Find the skill's line-count script
+SCRIPT_PATH=$(find ~/.claude/skills -path "*/agents-md-optimizer/scripts/line-count.mjs" 2>/dev/null | head -1)
+if [ -z "$SCRIPT_PATH" ]; then
+  # Fallback: search in common locations
+  SCRIPT_PATH=$(find . -path "*/agents-md-optimizer/scripts/line-count.mjs" 2>/dev/null | head -1)
+fi
 ```
 
-Classify each `##`/`###` section into one of three categories:
+Run the script if found:
+
+```bash
+node "$SCRIPT_PATH" '<TARGET_PATH>'
+```
+
+**Fallback** (if script not found): Count lines manually using Bash:
+
+```bash
+wc -l '<TARGET_PATH>'
+grep -c '^##' '<TARGET_PATH>'
+```
+
+Then classify each `##`/`###` section into one of three categories:
 
 | Category | Meaning | Action |
 |----------|---------|--------|
@@ -118,11 +154,7 @@ Detailed anti-pattern examples with before/after are in [`references/anti-patter
 
 ### Step 4: Verification
 
-Re-run statistics and present before/after comparison:
-
-```bash
-node ./scripts/line-count.mjs '<TARGET_PATH>'
-```
+Re-run statistics (using the same script or fallback method from Step 1) and present before/after comparison:
 
 ```
 ## Optimization Results

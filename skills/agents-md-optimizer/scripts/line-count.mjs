@@ -4,21 +4,31 @@
  * CLAUDE.md line count and section statistics
  * Usage: node line-count.mjs <path-to-claude-md>
  * Output: JSON with total lines, sections, code blocks, tables
+ * Exit codes: 0 = success, 1 = error
  */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const filePath = process.argv[2];
+
 if (!filePath) {
-  console.error('Usage: node line-count.mjs <path-to-claude-md>');
+  console.error(JSON.stringify({ error: 'No file path provided', usage: 'node line-count.mjs <path-to-file>' }));
+  process.exit(1);
+}
+
+const resolvedPath = resolve(filePath);
+
+if (!existsSync(resolvedPath)) {
+  console.error(JSON.stringify({ error: `File not found: ${resolvedPath}` }));
   process.exit(1);
 }
 
 let content;
 try {
-  content = readFileSync(filePath, 'utf8');
+  content = readFileSync(resolvedPath, 'utf8');
 } catch (err) {
-  console.error(`Error reading file: ${err.message}`);
+  console.error(JSON.stringify({ error: `Cannot read file: ${err.message}` }));
   process.exit(1);
 }
 
@@ -38,8 +48,7 @@ for (let i = 0; i < lines.length; i++) {
   // Track code blocks
   if (line.trimStart().startsWith('```')) {
     inCodeBlock = !inCodeBlock;
-    if (inCodeBlock) codeBlockLines++;
-    else codeBlockLines++;
+    codeBlockLines++;
     if (currentSection) currentSection.codeBlockLines++;
     continue;
   }
@@ -88,7 +97,7 @@ if (currentSection) {
 }
 
 const result = {
-  file: filePath,
+  file: resolvedPath,
   totalLines,
   nonEmptyLines,
   codeBlockLines,

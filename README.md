@@ -1,6 +1,8 @@
 # agents-md-optimizer
 
-A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code/skills) that optimizes agent context files (`CLAUDE.md`, `AGENTS.md`, `CURSOR.md`, etc.) using [Addy Osmani's agents-md methodology](https://addyosmani.com/blog/agents-md/).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code/skills) that optimizes agent context files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, etc.) using [Addy Osmani's agents-md methodology](https://addyosmani.com/blog/agents-md/).
 
 ## What it does
 
@@ -16,7 +18,7 @@ Research shows redundant context degrades agent performance by 15-20%, while foc
 ## Install
 
 ```bash
-npx skills add <username>/agents-md-optimizer
+npx skills add CaesiumY/agents-md-optimizer
 ```
 
 Or install from a local clone:
@@ -36,6 +38,10 @@ After installation, trigger the skill in Claude Code with any of these phrases:
 - `add gotchas`
 - `optimize AGENTS.md`
 - `optimize context file`
+- `CLAUDE.md 최적화`
+- `CLAUDE.md 줄이기`
+- `CLAUDE.md 다이어트`
+- `optimize .cursorrules`
 
 ### Flags
 
@@ -43,8 +49,14 @@ After installation, trigger the skill in Claude Code with any of these phrases:
 |------|--------|
 | `--dry-run` | Analyze and show diff without modifying the file |
 | `--report-only` | Output statistics and classification table only |
-| `--path <path>` | Target file path (default: `./CLAUDE.md`) |
+| `--path <path>` | Target file path (auto-detects if not specified) |
 | `--help` | Display usage and exit |
+
+### Auto-Detection
+
+When `--path` is not specified, the skill automatically searches for the first available file:
+
+`CLAUDE.md` → `AGENTS.md` → `.cursorrules` → `CURSOR.md`
 
 ### Examples
 
@@ -53,6 +65,7 @@ optimize CLAUDE.md
 optimize CLAUDE.md --dry-run
 optimize CLAUDE.md --report-only
 optimize AGENTS.md --path ./AGENTS.md
+CLAUDE.md 최적화
 ```
 
 ## How it works
