@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[한국어](README.ko.md)
+
 A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code/skills) that optimizes agent context files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, etc.) using [Addy Osmani's agents-md methodology](https://addyosmani.com/blog/agents-md/).
 
 ## What it does
@@ -38,9 +40,6 @@ After installation, trigger the skill in Claude Code with any of these phrases:
 - `add gotchas`
 - `optimize AGENTS.md`
 - `optimize context file`
-- `CLAUDE.md 최적화`
-- `CLAUDE.md 줄이기`
-- `CLAUDE.md 다이어트`
 - `optimize .cursorrules`
 
 ### Flags
@@ -65,7 +64,6 @@ optimize CLAUDE.md
 optimize CLAUDE.md --dry-run
 optimize CLAUDE.md --report-only
 optimize AGENTS.md --path ./AGENTS.md
-CLAUDE.md 최적화
 ```
 
 ## How it works
